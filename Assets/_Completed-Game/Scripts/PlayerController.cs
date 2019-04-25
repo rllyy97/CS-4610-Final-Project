@@ -2,6 +2,7 @@
 
 // Include the namespace required to use Unity UI
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 using System.Collections;
 
@@ -88,6 +89,19 @@ public class PlayerController : MonoBehaviour {
             if (IsGrounded()) ForceJump();
             else if (IsAlmostGrounded() && rb.velocity.normalized.y < 0) jumpLate = true;
         }
+
+        // R
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        // Backspace
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            OutOfBounds();
+        }
+
     }
 
     // Run once per frame (avoid user input here)
@@ -143,7 +157,7 @@ public class PlayerController : MonoBehaviour {
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Out")) OutOfBounds();
-        if (collision.gameObject.CompareTag("Ground")) GroundCollide();
+        else GroundCollide();
     }
 
     void SetCountText()
@@ -193,11 +207,15 @@ public class PlayerController : MonoBehaviour {
         rb.transform.position = new Vector3(0.0f, 1.0f, 0.0f);
         jumpLate = false;
 
+        camController.mouseX = 0;
+        camController.mouseY = 0;
+
     }
 
     void GroundCollide()
     {
         if (jumpLate && IsGrounded()) ForceJump();
+        else jumpLate = false;
     }
 
     void ForceJump()
