@@ -6,9 +6,6 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-	
-	// Create public variables for player speed, and for the Text UI game objects
-	public float speed;
 
     // UI Variables
 	public Text countText;
@@ -16,7 +13,6 @@ public class PlayerController : MonoBehaviour {
     public Slider speedBar;
     public Image windowShade;
 
-	// Create private references to the rigidbody component on the player, and the count of pick up objects picked up so far
 	private Rigidbody rb;
     private Collider coll;
 	private int count;
@@ -28,6 +24,8 @@ public class PlayerController : MonoBehaviour {
     public float gravity = 2.0f;
     private float groundDistance;
 
+    // Movement Variables
+    public float speed;
 
     // Camera Control
     public Camera cam;
@@ -40,10 +38,10 @@ public class PlayerController : MonoBehaviour {
     private Vector3 savedVelocity;
     private Vector3 savedAngularVelocity;
 
-    // At the start of the game..
+    // Initialization
     void Start ()
 	{
-		// Assign the Rigidbody component to our private rb variable
+		// Rigidbody and Collider
 		rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
 
@@ -52,7 +50,6 @@ public class PlayerController : MonoBehaviour {
 		SetCountText();
 		winText.text = "";
         windowShade.enabled = false;
-
 
         // Init jump variable
         jump = new Vector3(0.0f, 2.0f, 0.0f);
@@ -63,11 +60,13 @@ public class PlayerController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    // Checks if close enough to the ground to jump
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, groundDistance + 0.2f);
+        return Physics.Raycast(transform.position, Vector3.down, groundDistance + 0.25f);
     }
 
+    // Checks if close enough to the ground for a delayed jump
     bool IsAlmostGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, groundDistance + 2.0f);
@@ -76,15 +75,18 @@ public class PlayerController : MonoBehaviour {
     // Run consistently (user input)
     void Update()
     {
+        // ESCAPE
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (paused) Unpause();
             else Pause();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        // SPACE
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.AddForce(jump * jumpScale, ForceMode.Impulse);
+            if (IsGrounded()) ForceJump();
+            else if (IsAlmostGrounded() && rb.velocity.normalized.y < 0) jumpLate = true;
         }
     }
 
@@ -101,7 +103,7 @@ public class PlayerController : MonoBehaviour {
         // Setup Camera
         CameraInput();
 
-        // Get directions relative to camera
+        // Move relative to camera
         var forward = cam.transform.forward;
         var right = cam.transform.right;
         forward.y = 0f;
@@ -109,13 +111,7 @@ public class PlayerController : MonoBehaviour {
         forward.Normalize();
         right.Normalize();
         var desiredMoveDirection = forward * verticalAxis + right * horizontalAxis;
-
-
-        // Create a Vector3 variable, and assign X and Z to feature our horizontal and vertical float variables above
         Vector3 movement = new Vector3 (desiredMoveDirection.x, 0.0f, desiredMoveDirection.z);
-
-		// Add a physical force to our Player rigidbody using our 'movement' Vector3 above, 
-		// multiplying it by 'speed' - our public player speed that appears in the inspector
 		rb.AddForce (movement * speed);
 
         // Gravity
@@ -132,43 +128,28 @@ public class PlayerController : MonoBehaviour {
         camController.RotateCamera(X, Y);
     }
 
-    // Control Collisions
+    // Non-Rigid Collisions
     void OnTriggerEnter(Collider other) 
 	{
-        // Control Pick Up Event
    		if (other.gameObject.CompareTag ("Pick Up"))
 		{
-			// Make the other game object (the pick up) inactive, to make it disappear
 			other.gameObject.SetActive (false);
-
-			// Add one to the score variable 'count'
 			count = count + 1;
-
-			// Run the 'SetCountText()' function
-			SetCountText ();
+            SetCountText ();
 		}
 	}
 
+    // Physical Collisions
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Out"))
-        {
-            OutOfBounds();
-        }
+        if (collision.gameObject.CompareTag("Out")) OutOfBounds();
+        if (collision.gameObject.CompareTag("Ground")) GroundCollide();
     }
 
-    // Create a standalone function that can update the 'countText' UI and check if the required amount to win has been achieved
     void SetCountText()
 	{
-		// Update the text field of our 'countText' variable
 		countText.text = count.ToString ();
-
-		// Check if our 'count' is equal to or exceeded 12
-		if (count >= 12) 
-		{
-			// Set the text value of our 'winText'
-			winText.text = "Win Text";
-		}
+        if (count >= 12) winText.text = "Win Text";
 	}
 
     void Pause()
@@ -210,6 +191,22 @@ public class PlayerController : MonoBehaviour {
         rb.constraints = RigidbodyConstraints.FreezeAll;
         rb.constraints = RigidbodyConstraints.None;
         rb.transform.position = new Vector3(0.0f, 1.0f, 0.0f);
+        jumpLate = false;
+
+    }
+
+    void GroundCollide()
+    {
+        if (jumpLate && IsGrounded()) ForceJump();
+    }
+
+    void ForceJump()
+    {
+        Vector3 jumpForce = jump * jumpScale;
+        jumpForce.y -= rb.velocity.y * 0.8f;
+        if (jumpForce.y < 0) jumpForce.y = 0;
+        rb.AddForce(jumpForce, ForceMode.Impulse);
+        jumpLate = false;
 
     }
 

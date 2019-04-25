@@ -305,7 +305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6565ea6141ea34a6f8b1b7ec81398f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
   countText: {fileID: 1607501105}
   winText: {fileID: 904526836}
   speedBar: {fileID: 786783542}
@@ -313,6 +312,7 @@ MonoBehaviour:
   jumpLate: 0
   jumpScale: 5
   gravity: 15
+  speed: 15
   cam: {fileID: 1062528674}
   camController: {fileID: 1062528676}
   rotateCameraXInput: Mouse X
@@ -771,7 +771,7 @@ GameObject:
   - component: {fileID: 714981821}
   m_Layer: 0
   m_Name: South Wall (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2712,7 +2712,7 @@ GameObject:
   - component: {fileID: 1897389796}
   m_Layer: 0
   m_Name: South Wall (2)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
