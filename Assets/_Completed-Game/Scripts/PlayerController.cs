@@ -9,9 +9,12 @@ public class PlayerController : MonoBehaviour {
 	
 	// Create public variables for player speed, and for the Text UI game objects
 	public float speed;
+
+    // UI Variables
 	public Text countText;
 	public Text winText;
     public Slider speedBar;
+    public Image windowShade;
 
 	// Create private references to the rigidbody component on the player, and the count of pick up objects picked up so far
 	private Rigidbody rb;
@@ -32,6 +35,11 @@ public class PlayerController : MonoBehaviour {
     public string rotateCameraXInput = "Mouse X";
     public string rotateCameraYInput = "Mouse Y";
 
+    // Pause + Menu variables
+    public bool paused = false;
+    private Vector3 savedVelocity;
+    private Vector3 savedAngularVelocity;
+
     // At the start of the game..
     void Start ()
 	{
@@ -39,14 +47,12 @@ public class PlayerController : MonoBehaviour {
 		rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
 
-		// Set the count to zero 
+        // Init UI
 		count = 0;
-
-		// Run the SetCountText function to update the UI (see below)
-		SetCountText ();
-
-		// Set the text property of our Win Text UI to an empty string, making the 'You Win' (game over message) blank
+		SetCountText();
 		winText.text = "";
+        windowShade.enabled = false;
+
 
         // Init jump variable
         jump = new Vector3(0.0f, 2.0f, 0.0f);
@@ -67,9 +73,27 @@ public class PlayerController : MonoBehaviour {
         return Physics.Raycast(transform.position, Vector3.down, groundDistance + 2.0f);
     }
 
-    // Each physics step..
+    // Run consistently (user input)
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (paused) Unpause();
+            else Pause();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        {
+            rb.AddForce(jump * jumpScale, ForceMode.Impulse);
+        }
+    }
+
+    // Run once per frame (avoid user input here)
     void FixedUpdate ()
 	{
+        // Refuse player and camera movement
+        if (paused) return;
+
 		// Set some local float variables equal to the value of our Horizontal and Vertical Inputs
 		float horizontalAxis = Input.GetAxis ("Horizontal");
 		float verticalAxis = Input.GetAxis ("Vertical");
@@ -96,11 +120,6 @@ public class PlayerController : MonoBehaviour {
 
         // Gravity
         rb.AddForce(Vector3.down * gravity * rb.mass);
-
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
-        {
-            rb.AddForce(jump * jumpScale, ForceMode.Impulse);
-        }
 
         speedBar.value = rb.velocity.magnitude;
     }
@@ -143,5 +162,39 @@ public class PlayerController : MonoBehaviour {
 			winText.text = "Win Text";
 		}
 	}
+
+    void Pause()
+    {
+        paused = true;
+
+        // Freeze
+        savedVelocity = rb.velocity;
+        savedAngularVelocity = rb.angularVelocity;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        
+        // UI Changes
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        winText.text = "Paused";
+        windowShade.enabled = true;
+
+    }
+
+    void Unpause()
+    {
+        paused = false;
+        
+        // Unfreeze
+        rb.constraints = RigidbodyConstraints.None;
+        rb.AddForce(savedVelocity, ForceMode.VelocityChange);
+        rb.AddTorque(savedAngularVelocity, ForceMode.VelocityChange);
+
+        // UI Changes
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        winText.text = "";
+        windowShade.enabled = false;
+
+    }
 
 }
