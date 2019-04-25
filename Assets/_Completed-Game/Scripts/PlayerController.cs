@@ -149,8 +149,16 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	// Create a standalone function that can update the 'countText' UI and check if the required amount to win has been achieved
-	void SetCountText()
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Out"))
+        {
+            OutOfBounds();
+        }
+    }
+
+    // Create a standalone function that can update the 'countText' UI and check if the required amount to win has been achieved
+    void SetCountText()
 	{
 		// Update the text field of our 'countText' variable
 		countText.text = count.ToString ();
@@ -194,6 +202,14 @@ public class PlayerController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         winText.text = "";
         windowShade.enabled = false;
+
+    }
+    
+    void OutOfBounds()
+    {
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        rb.constraints = RigidbodyConstraints.None;
+        rb.transform.position = new Vector3(0.0f, 1.0f, 0.0f);
 
     }
 
