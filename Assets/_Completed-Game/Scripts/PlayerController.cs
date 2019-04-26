@@ -10,13 +10,22 @@ public class PlayerController : MonoBehaviour {
 
     // UI Variables
 	public Text countText;
-	public Text winText;
+    private int count;
+    public Text winText;
     public Slider speedBar;
     public Image windowShade;
 
-	private Rigidbody rb;
+    // Sound Variables
+    public AudioSource audioSource;
+    public AudioClip bounceSound;
+    public AudioClip rollSound;
+    private float lowPitchRange = .6F;
+    private float highPitchRange = 1.0F;
+    private float velocityClipSplit = 10F;
+
+    // Physical Components
+    private Rigidbody rb;
     private Collider coll;
-	private int count;
 
     // Jump Variables
     private Vector3 jump;
@@ -42,15 +51,18 @@ public class PlayerController : MonoBehaviour {
     // Initialization
     void Start ()
 	{
-		// Rigidbody and Collider
+		// Init Components
 		rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+        audioSource = GetComponent<AudioSource>();
 
         // Init UI
-		count = 0;
+        count = 0;
 		SetCountText();
 		winText.text = "";
         windowShade.enabled = false;
+
+        
 
         // Init jump variable
         jump = new Vector3(0.0f, 2.0f, 0.0f);
@@ -153,11 +165,11 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-    // Physical Collisions
+    // Rigid Collisions
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Out")) OutOfBounds();
-        else GroundCollide();
+        else GroundCollide(collision.relativeVelocity.magnitude);
     }
 
     void SetCountText()
@@ -212,8 +224,12 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    void GroundCollide()
+    void GroundCollide(float rv)
     {
+        audioSource.pitch = Random.Range(lowPitchRange, highPitchRange);
+        float hitVolume = rv / 80;
+        countText.text = hitVolume.ToString();
+        audioSource.PlayOneShot(bounceSound, hitVolume);
         if (jumpLate && IsGrounded()) ForceJump();
         else jumpLate = false;
     }
