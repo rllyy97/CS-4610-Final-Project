@@ -12,12 +12,15 @@ public class PlayerController : MonoBehaviour {
 	public Text countText;
     private int count;
     public Text winText;
+    public Text timeText;
+    private float time;
     public Slider speedBar;
     public Image windowShade;
 
     // Sound Variables
-    public AudioSource audioSource;
+    public AudioSource bounceSource;
     public AudioClip bounceSound;
+    public AudioSource rollSource;
     public AudioClip rollSound;
     private float lowPitchRange = .6F;
     private float highPitchRange = 1.0F;
@@ -47,6 +50,7 @@ public class PlayerController : MonoBehaviour {
 
     // Pause + Menu variables
     public bool paused = false;
+    private bool timerRunning = true;
     private Vector3 savedVelocity;
     private Vector3 savedAngularVelocity;
 
@@ -56,11 +60,12 @@ public class PlayerController : MonoBehaviour {
 		// Init Components
 		rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
-        audioSource = GetComponent<AudioSource>();
+        bounceSource = GetComponent<AudioSource>();
+        rollSource = GetComponent<AudioSource>();
 
         // Init UI
         count = 0;
-		SetCountText();
+        countText.text = "0";
 		winText.text = "";
         windowShade.enabled = false;
 
@@ -116,6 +121,12 @@ public class PlayerController : MonoBehaviour {
             OutOfBounds();
         }
 
+        // Enter
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Win();
+        }
+
     }
 
     // Run once per frame (avoid user input here)
@@ -124,8 +135,15 @@ public class PlayerController : MonoBehaviour {
         // Refuse player and camera movement
         if (paused) return;
 
-		// Set some local float variables equal to the value of our Horizontal and Vertical Inputs
-		float horizontalAxis = Input.GetAxis ("Horizontal");
+        // Timer
+        if (timerRunning)
+        {
+            time += Time.deltaTime;
+            timeText.text = time.ToString("0.00") + " sec";
+        }
+
+        // Set some local float variables equal to the value of our Horizontal and Vertical Inputs
+        float horizontalAxis = Input.GetAxis ("Horizontal");
 		float verticalAxis = Input.GetAxis ("Vertical");
 
         // Setup Camera
@@ -163,12 +181,7 @@ public class PlayerController : MonoBehaviour {
     // Non-Rigid Collisions
     void OnTriggerEnter(Collider other) 
 	{
-   		if (other.gameObject.CompareTag ("Pick Up"))
-		{
-			other.gameObject.SetActive (false);
-			count = count + 1;
-            SetCountText ();
-		}
+        if (other.gameObject.CompareTag("Pick Up")) Pickup(other);
 	}
 
     // Rigid Collisions
@@ -178,10 +191,21 @@ public class PlayerController : MonoBehaviour {
         else GroundCollide(collision.relativeVelocity.magnitude);
     }
 
-    void SetCountText()
+    // STAY Collisions
+    void OnCollisionStay(Collision collisionInfo)
+    {
+        rollSource.pitch = Random.Range(lowPitchRange, highPitchRange);
+        rollSource.loop = true;
+        float vol = rb.velocity.magnitude / 80;
+        rollSource.PlayOneShot(rollSound, vol);
+    }
+
+    void Pickup(Collider pickup)
 	{
-		countText.text = count.ToString ();
-        if (count >= 12) winText.text = "Win Text";
+        pickup.gameObject.SetActive(false);
+        count++;
+        countText.text = count.ToString ();
+        if (count >= 12) Win();
 	}
 
     void Pause()
@@ -232,14 +256,15 @@ public class PlayerController : MonoBehaviour {
 
     void GroundCollide(float rv)
     {
-        audioSource.pitch = Random.Range(lowPitchRange, highPitchRange);
+        bounceSource.pitch = Random.Range(lowPitchRange, highPitchRange);
         float hitVolume = rv / 80;
-        countText.text = hitVolume.ToString();
-        audioSource.PlayOneShot(bounceSound, hitVolume);
+        countText.text = hitVolume.ToString("0.00");
+        bounceSource.PlayOneShot(bounceSound, hitVolume);
         if (jumpLate && IsGrounded()) ForceJump();
         else jumpLate = false;
     }
 
+    
     void ForceJump()
     {
         Vector3 jumpForce = jump * jumpScale;
@@ -247,6 +272,25 @@ public class PlayerController : MonoBehaviour {
         if (jumpForce.y < 0) jumpForce.y = 0;
         rb.AddForce(jumpForce, ForceMode.Impulse);
         jumpLate = false;
+
+    }
+
+    void Win()
+    {
+        timerRunning = false;
+        winText.text = "Win Text";
+
+        /*
+        // Blink Time
+        while (true)
+        {
+            timeText.enabled = true;
+            yield return new WaitForSeconds(0.5f);
+            timeText.enabled = false;
+            yield return new WaitForSeconds(0.5f);
+
+        }
+        */
 
     }
 

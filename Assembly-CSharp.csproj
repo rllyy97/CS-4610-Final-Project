@@ -73,7 +73,7 @@
     <Compile Include="Assets\Invector-3rdPersonController\Basic Locomotion LITE\Scripts\Generic\vDestroyGameObject.cs" />
     <Compile Include="Assets\Invector-3rdPersonController\Basic Locomotion LITE\Scripts\Generic\vExtensions.cs" />
     <Compile Include="Assets\Invector-3rdPersonController\Basic Locomotion LITE\Scripts\Generic\vPickupItem.cs" />
-    <None Include="Assets\Shared\ShaderTools.cginc" />
+    <None Include="Assets\Shaders\Shared\ShaderTools.cginc" />
     <None Include="Assets\Shaders\Rainbow.shader" />
     <None Include="Assets\Invector-3rdPersonController\Basic Locomotion LITE\README_Basic.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
