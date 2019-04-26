@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour {
     public OrbitCameraController camController;
     public string rotateCameraXInput = "Mouse X";
     public string rotateCameraYInput = "Mouse Y";
+    public float minFOV = 60.0f;
+    private float deltaFOV = 0.0f;
 
     // Pause + Menu variables
     public bool paused = false;
@@ -144,6 +146,10 @@ public class PlayerController : MonoBehaviour {
         rb.AddForce(Vector3.down * gravity * rb.mass);
 
         speedBar.value = rb.velocity.magnitude;
+
+        // Dynamic FOV
+        deltaFOV = (deltaFOV + rb.velocity.magnitude) / 2;
+        cam.fieldOfView = minFOV + deltaFOV;
     }
 
     // Control Camera
