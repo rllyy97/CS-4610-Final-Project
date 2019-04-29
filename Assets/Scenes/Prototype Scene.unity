@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657928, g: 0.4964131, b: 0.5748174, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657993, g: 0.49641424, b: 0.57481825, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -198,8 +198,8 @@ GameObject:
   - component: {fileID: 68802590}
   - component: {fileID: 68802589}
   - component: {fileID: 68802594}
-  - component: {fileID: 68802595}
   - component: {fileID: 68802596}
+  - component: {fileID: 68802595}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -253,7 +253,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e80ebc0dfd9ad904bb71c5ada0bd59a1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -312,14 +312,15 @@ MonoBehaviour:
   timeText: {fileID: 1607501105}
   speedBar: {fileID: 786783542}
   windowShade: {fileID: 1494598567}
-  bounceSource: {fileID: 68802595}
+  bounceSource: {fileID: 68802596}
   bounceSound: {fileID: 8300000, guid: db82bad7dec629c43a3d2d058e64b25c, type: 3}
-  rollSource: {fileID: 68802596}
+  rollSource: {fileID: 68802595}
   rollSound: {fileID: 8300000, guid: b819336c2491e4942ae5ec04c2f49dd9, type: 3}
   jumpLate: 0
   jumpScale: 5
   gravity: 15
-  speed: 15
+  speed: 12
+  rolling: 0
   cam: {fileID: 1062528674}
   camController: {fileID: 1062528676}
   rotateCameraXInput: Mouse X

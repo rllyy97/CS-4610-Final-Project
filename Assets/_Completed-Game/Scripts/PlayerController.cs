@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour {
 
     // Movement Variables
     public float speed;
+    public bool rolling;
 
     // Camera Control
     public Camera cam;
@@ -60,8 +61,6 @@ public class PlayerController : MonoBehaviour {
 		// Init Components
 		rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
-        bounceSource = GetComponent<AudioSource>();
-        rollSource = GetComponent<AudioSource>();
 
         // Init UI
         count = 0;
@@ -164,6 +163,7 @@ public class PlayerController : MonoBehaviour {
         rb.AddForce(Vector3.down * gravity * rb.mass);
 
         speedBar.value = rb.velocity.magnitude;
+        rollSource.volume = rb.velocity.magnitude / 50;
 
         // Dynamic FOV
         deltaFOV = (deltaFOV + rb.velocity.magnitude) / 2;
@@ -194,12 +194,22 @@ public class PlayerController : MonoBehaviour {
     // STAY Collisions
     void OnCollisionStay(Collision collisionInfo)
     {
-        rollSource.pitch = Random.Range(lowPitchRange, highPitchRange);
-        rollSource.loop = true;
-        float vol = rb.velocity.magnitude / 80;
-        rollSource.PlayOneShot(rollSound, vol);
+        if (rolling == false)
+        {
+            rolling = true;
+            rollSource.loop = true;
+            rollSource.PlayOneShot(rollSound, 1);
+        }
+        
     }
 
+    private void OnCollisionExit(Collision collision)
+    {
+        rolling = false;
+        rollSource.Stop();
+    }
+
+    // Pickup Event
     void Pickup(Collider pickup)
 	{
         pickup.gameObject.SetActive(false);
@@ -208,40 +218,7 @@ public class PlayerController : MonoBehaviour {
         if (count >= 12) Win();
 	}
 
-    void Pause()
-    {
-        paused = true;
-
-        // Freeze
-        savedVelocity = rb.velocity;
-        savedAngularVelocity = rb.angularVelocity;
-        rb.constraints = RigidbodyConstraints.FreezeAll;
-        
-        // UI Changes
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        winText.text = "Paused";
-        windowShade.enabled = true;
-
-    }
-
-    void Unpause()
-    {
-        paused = false;
-        
-        // Unfreeze
-        rb.constraints = RigidbodyConstraints.None;
-        rb.AddForce(savedVelocity, ForceMode.VelocityChange);
-        rb.AddTorque(savedAngularVelocity, ForceMode.VelocityChange);
-
-        // UI Changes
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        winText.text = "";
-        windowShade.enabled = false;
-
-    }
-    
+    // Out of Bounds
     void OutOfBounds()
     {
         rb.constraints = RigidbodyConstraints.FreezeAll;
@@ -254,17 +231,17 @@ public class PlayerController : MonoBehaviour {
 
     }
 
+    // Collision with Rigid object
     void GroundCollide(float rv)
     {
         bounceSource.pitch = Random.Range(lowPitchRange, highPitchRange);
         float hitVolume = rv / 80;
-        countText.text = hitVolume.ToString("0.00");
         bounceSource.PlayOneShot(bounceSound, hitVolume);
         if (jumpLate && IsGrounded()) ForceJump();
         else jumpLate = false;
     }
 
-    
+    // Jump on ground contact
     void ForceJump()
     {
         Vector3 jumpForce = jump * jumpScale;
@@ -272,6 +249,46 @@ public class PlayerController : MonoBehaviour {
         if (jumpForce.y < 0) jumpForce.y = 0;
         rb.AddForce(jumpForce, ForceMode.Impulse);
         jumpLate = false;
+
+    }
+
+    void Pause()
+    {
+        paused = true;
+
+        // Freeze
+        savedVelocity = rb.velocity;
+        savedAngularVelocity = rb.angularVelocity;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+
+        // UI Changes
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        winText.text = "Paused";
+        windowShade.enabled = true;
+
+        // Sound
+        rolling = false;
+        rollSource.Stop();
+
+    }
+
+    void Unpause()
+    {
+        paused = false;
+
+        // Unfreeze
+        rb.constraints = RigidbodyConstraints.None;
+        rb.AddForce(savedVelocity, ForceMode.VelocityChange);
+        rb.AddTorque(savedAngularVelocity, ForceMode.VelocityChange);
+
+        // UI Changes
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        winText.text = "";
+        windowShade.enabled = false;
+
+        // Sound
 
     }
 
