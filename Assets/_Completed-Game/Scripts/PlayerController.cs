@@ -22,9 +22,13 @@ public class PlayerController : MonoBehaviour {
     public AudioClip bounceSound;
     public AudioSource rollSource;
     public AudioClip rollSound;
-    private float lowPitchRange = .6F;
-    private float highPitchRange = 1.0F;
-    private float velocityClipSplit = 10F;
+    public AudioSource alertSource;
+    public AudioClip clickSound;
+    public AudioClip fallSound;
+    public AudioClip pickupSound;
+    public AudioClip winSound;
+    private readonly float lowPitchRange = .6F;
+    private readonly float highPitchRange = 1.0F;
 
     // Physical Components
     private Rigidbody rb;
@@ -67,8 +71,6 @@ public class PlayerController : MonoBehaviour {
         countText.text = "0";
 		winText.text = "";
         windowShade.enabled = false;
-
-        
 
         // Init jump variable
         jump = new Vector3(0.0f, 2.0f, 0.0f);
@@ -163,7 +165,7 @@ public class PlayerController : MonoBehaviour {
         rb.AddForce(Vector3.down * gravity * rb.mass);
 
         speedBar.value = rb.velocity.magnitude;
-        rollSource.volume = rb.velocity.magnitude / 50;
+        rollSource.volume = rb.velocity.magnitude / 35;
 
         // Dynamic FOV
         deltaFOV = (deltaFOV + rb.velocity.magnitude) / 2;
@@ -198,7 +200,7 @@ public class PlayerController : MonoBehaviour {
         {
             rolling = true;
             rollSource.loop = true;
-            rollSource.PlayOneShot(rollSound, 1);
+            rollSource.Play();
         }
         
     }
@@ -216,6 +218,7 @@ public class PlayerController : MonoBehaviour {
         count++;
         countText.text = count.ToString ();
         if (count >= 12) Win();
+        else alertSource.PlayOneShot(pickupSound);
 	}
 
     // Out of Bounds
@@ -229,13 +232,15 @@ public class PlayerController : MonoBehaviour {
         camController.mouseX = 0;
         camController.mouseY = 0;
 
+        alertSource.PlayOneShot(fallSound);
+
     }
 
     // Collision with Rigid object
     void GroundCollide(float rv)
     {
         bounceSource.pitch = Random.Range(lowPitchRange, highPitchRange);
-        float hitVolume = rv / 80;
+        float hitVolume = rv / 50;
         bounceSource.PlayOneShot(bounceSound, hitVolume);
         if (jumpLate && IsGrounded()) ForceJump();
         else jumpLate = false;
@@ -269,6 +274,7 @@ public class PlayerController : MonoBehaviour {
 
         // Sound
         rolling = false;
+        rollSource.volume = 0;
         rollSource.Stop();
 
     }
@@ -296,6 +302,7 @@ public class PlayerController : MonoBehaviour {
     {
         timerRunning = false;
         winText.text = "Win Text";
+        alertSource.PlayOneShot(winSound);
 
         /*
         // Blink Time
