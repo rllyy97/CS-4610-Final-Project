@@ -68,6 +68,9 @@ public class PlayerController : MonoBehaviour {
     private Vector3 savedVelocity;
     private Vector3 savedAngularVelocity;
 
+    // Pickup Variables
+    public int pickupMax;
+
     // Initialization
     void Start ()
 	{
@@ -232,7 +235,7 @@ public class PlayerController : MonoBehaviour {
         pickup.gameObject.SetActive(false);
         count++;
         countText.text = count.ToString ();
-        if (count >= 12) Win();
+        if (count >= pickupMax) Win();
         else alertSource.PlayOneShot(pickupSound);
 	}
 
