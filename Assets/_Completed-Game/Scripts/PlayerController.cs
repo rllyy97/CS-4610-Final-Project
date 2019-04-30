@@ -103,7 +103,12 @@ public class PlayerController : MonoBehaviour {
     // Checks if close enough to the ground to jump
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, groundDistance + 0.25f);
+        if (Physics.Raycast(transform.position, Vector3.down, groundDistance + 0.25f)) return true;
+        if (Physics.Raycast(transform.position, Vector3.down + Vector3.left, groundDistance + 0.20f)) return true;
+        if (Physics.Raycast(transform.position, Vector3.down + Vector3.right, groundDistance + 0.20f)) return true;
+        if (Physics.Raycast(transform.position, Vector3.down + Vector3.forward, groundDistance + 0.20f)) return true;
+        if (Physics.Raycast(transform.position, Vector3.down + Vector3.back, groundDistance + 0.20f)) return true;
+        return false;
     }
 
     // Checks if close enough to the ground for a delayed jump
