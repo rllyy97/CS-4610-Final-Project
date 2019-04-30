@@ -2454,9 +2454,9 @@ MonoBehaviour:
   musicSource: {fileID: 1526444849}
   musicVolume: 0.2
   jumpLate: 0
-  jumpScale: 5
-  gravity: 15
-  speed: 12
+  jumpScale: 8
+  gravity: 20
+  speed: 15
   rolling: 0
   cam: {fileID: 1199389174}
   camController: {fileID: 1199389171}
@@ -2473,7 +2473,7 @@ Rigidbody:
   m_GameObject: {fileID: 1526444847}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 0.5
   m_AngularDrag: 0
   m_UseGravity: 0
   m_IsKinematic: 0

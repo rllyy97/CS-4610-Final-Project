@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour {
 
     // Movement Variables
     public float speed;
+    public float maxSpeed;
     public bool rolling;
 
     // Camera Control
@@ -183,7 +184,8 @@ public class PlayerController : MonoBehaviour {
         right.Normalize();
         var desiredMoveDirection = forward * verticalAxis + right * horizontalAxis;
         Vector3 movement = new Vector3 (desiredMoveDirection.x, 0.0f, desiredMoveDirection.z);
-		rb.AddForce (movement * speed);
+        var controlAcceleration = (maxSpeed - (Vector3.Dot(rb.velocity, movement.normalized))) / maxSpeed;
+		rb.AddForce (movement * speed * controlAcceleration);
 
         // Gravity
         rb.AddForce(Vector3.down * gravity * rb.mass);
