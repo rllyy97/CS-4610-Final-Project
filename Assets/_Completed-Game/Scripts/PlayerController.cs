@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour {
     private Vector3 savedAngularVelocity;
 
     // Pickup Variables
-    public int pickupMax;
+    private int pickupMax;
 
     // Initialization
     void Start ()
@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour {
 		// Init Components
 		rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+        pickupMax = GameObject.FindGameObjectsWithTag("Pick Up").Length;
 
         // Init UI
         count = 0;

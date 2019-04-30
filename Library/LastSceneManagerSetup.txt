@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/MegaPack1Lite/VictorianPack/Scenes/victorian_showcase.unity
+- path: Assets/Scenes/House.unity
   isLoaded: 1
   isActive: 1
