@@ -20,13 +20,22 @@ public class PlayerController : MonoBehaviour {
     // Sound Variables
     public AudioSource bounceSource;
     public AudioClip bounceSound;
+
     public AudioSource rollSource;
     public AudioClip rollSound;
+
     public AudioSource alertSource;
     public AudioClip clickSound;
     public AudioClip fallSound;
     public AudioClip pickupSound;
     public AudioClip winSound;
+    public AudioClip uiUp;
+    public AudioClip uiDown;
+    public AudioClip hopSound;
+
+    public AudioSource musicSource;
+    public float musicVolume = 0.2f;
+
     private readonly float lowPitchRange = .6F;
     private readonly float highPitchRange = 1.0F;
 
@@ -79,6 +88,12 @@ public class PlayerController : MonoBehaviour {
         // Handle Cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        // Music
+        musicSource.loop = true;
+        musicSource.volume = musicVolume;
+        musicSource.Play();
+
     }
 
     // Checks if close enough to the ground to jump
@@ -165,7 +180,7 @@ public class PlayerController : MonoBehaviour {
         rb.AddForce(Vector3.down * gravity * rb.mass);
 
         speedBar.value = rb.velocity.magnitude;
-        rollSource.volume = rb.velocity.magnitude / 35;
+        rollSource.volume = rb.velocity.magnitude / 25;
 
         // Dynamic FOV
         deltaFOV = (deltaFOV + rb.velocity.magnitude) / 2;
@@ -240,7 +255,7 @@ public class PlayerController : MonoBehaviour {
     void GroundCollide(float rv)
     {
         bounceSource.pitch = Random.Range(lowPitchRange, highPitchRange);
-        float hitVolume = rv / 50;
+        float hitVolume = rv / 40;
         bounceSource.PlayOneShot(bounceSound, hitVolume);
         if (jumpLate && IsGrounded()) ForceJump();
         else jumpLate = false;
@@ -254,6 +269,7 @@ public class PlayerController : MonoBehaviour {
         if (jumpForce.y < 0) jumpForce.y = 0;
         rb.AddForce(jumpForce, ForceMode.Impulse);
         jumpLate = false;
+        alertSource.PlayOneShot(hopSound, 1.2f);
 
     }
 
@@ -276,6 +292,8 @@ public class PlayerController : MonoBehaviour {
         rolling = false;
         rollSource.volume = 0;
         rollSource.Stop();
+        alertSource.PlayOneShot(uiDown);
+        musicSource.volume = musicVolume / 2;
 
     }
 
@@ -295,7 +313,8 @@ public class PlayerController : MonoBehaviour {
         windowShade.enabled = false;
 
         // Sound
-
+        alertSource.PlayOneShot(uiUp);
+        musicSource.volume = musicVolume;
     }
 
     void Win()
