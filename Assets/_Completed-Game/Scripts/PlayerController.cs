@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour {
 
     // Movement Variables
     public float speed;
-    public float maxSpeed;
+    public float maxSpeed = 80;
     public bool rolling;
 
     // Camera Control
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour {
 
         // Init UI
         count = 0;
-        countText.text = "0";
+        countText.text = "0 / " + pickupMax;
 		winText.text = "";
         windowShade.enabled = false;
 
@@ -242,7 +242,7 @@ public class PlayerController : MonoBehaviour {
 	{
         pickup.gameObject.SetActive(false);
         count++;
-        countText.text = count.ToString ();
+        countText.text = count.ToString() + " / " + pickupMax;
         if (count >= pickupMax) Win();
         else alertSource.PlayOneShot(pickupSound);
 	}
