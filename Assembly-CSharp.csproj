@@ -138,6 +138,7 @@
     <Compile Include="Assets\SabreCSG\Scripts\UI\Toolbar.cs" />
     <Compile Include="Assets\SabreCSG\Scripts\UI\VertexColorWindow.cs" />
     <Compile Include="Assets\SabreCSG\Scripts\UpdateUtility.cs" />
+    <Compile Include="Assets\SimpleCloudSystem by RM\SCS.cs" />
     <None Include="Assets\SabreCSG\Shaders\VertexTinted.shader" />
     <None Include="Assets\SabreCSG\Shaders\UINoAlpha.shader" />
     <None Include="Assets\Shaders\Shared\ShaderTools.cginc" />
@@ -152,8 +153,10 @@
     <None Include="Assets\SabreCSG\Shaders\SeeExcluded.shader" />
     <None Include="Assets\MegaPack1Lite\EnchantedForestPack1\README.txt" />
     <None Include="Assets\SabreCSG\Shaders\LineDashed.shader" />
+    <None Include="Assets\SimpleCloudSystem by RM\Read Me.txt" />
     <None Include="Assets\SabreCSG\Shaders\Diffuse-VertexColored.shader" />
     <None Include="Assets\SabreCSG\Shaders\Handle.shader" />
+    <None Include="Assets\SimpleCloudSystem by RM\SCS Instructions.txt" />
     <None Include="Assets\MegaPack1Lite\TropicalIslandPack1\README.txt" />
     <None Include="Assets\MegaPack1Lite\ToolsAndWeapons\README.txt" />
     <None Include="Assets\SabreCSG\Shaders\Plane.shader" />
