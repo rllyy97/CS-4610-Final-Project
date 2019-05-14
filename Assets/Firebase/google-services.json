@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "127612667767",
+    "firebase_url": "https://smemrmg2sf.firebaseio.com",
+    "project_id": "smemrmg2sf",
+    "storage_bucket": "smemrmg2sf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127612667767:android:1fd5bf7b7fc1042f",
+        "android_client_info": {
+          "package_name": "com.riley.marble"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127612667767-oqdd99cta71i4du963mhvne0vo46ira7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhvU_ExohFy7_GgJ4nDA4YtmP9NLU1T48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127612667767-oqdd99cta71i4du963mhvne0vo46ira7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
