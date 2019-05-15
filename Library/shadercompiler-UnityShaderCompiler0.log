@@ -1,2 +1,26 @@
 Base path: /Applications/Unity/Hub/Editor/2019.1.0f2/Unity.app/Contents
 Cmd: initializeCompiler
+Cmd: preprocess
+  insize=1395 outsize=1575 ok=1
+Cmd: preprocess
+  insize=839 outsize=274 ok=1
+Cmd: preprocess
+  insize=1006 outsize=1115 ok=1
+Cmd: preprocess
+  insize=2006 outsize=889 ok=1
+Cmd: preprocess
+  insize=1203 outsize=244 ok=1
+Cmd: preprocess
+  insize=1237 outsize=287 ok=1
+Cmd: preprocess
+  insize=876 outsize=237 ok=1
+Cmd: preprocess
+  insize=1198 outsize=302 ok=1
+Cmd: preprocess
+  insize=625 outsize=1041 ok=1
+Cmd: preprocess
+  insize=1654 outsize=523 ok=1
+Cmd: preprocess
+  insize=1383 outsize=381 ok=1
+Cmd: preprocess
+  insize=1208 outsize=312 ok=1
