@@ -5,7 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class MenuScript : MonoBehaviour
 {
-    void Start() { }
+    // Sound Variables
+    public AudioSource soundSource;
+    public AudioClip clip;
+
+    void Start() { Sound(); }
     void Update() { }
 
     public void OpenLevel() { SceneManager.LoadScene("Levels"); }
@@ -20,4 +24,6 @@ public class MenuScript : MonoBehaviour
     public void OpenTutorial() { SceneManager.LoadScene("Prototype Scene"); }
     public void OpenHouse() { SceneManager.LoadScene("House"); }
     public void OpenSky() { SceneManager.LoadScene("Sky"); }
+
+    public void Sound() { soundSource.PlayOneShot(clip); }
 }

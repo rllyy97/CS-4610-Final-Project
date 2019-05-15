@@ -98,8 +98,10 @@ public class PlayerController : MonoBehaviour {
     // Initialization
     void Start ()
 	{
-		// Init Components
-		rb = GetComponent<Rigidbody>();
+        alertSource.PlayOneShot(uiUp);
+
+        // Init Components
+        rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
         pickupMax = GameObject.FindGameObjectsWithTag("Pick Up").Length;
 
@@ -506,6 +508,10 @@ public class PlayerController : MonoBehaviour {
                 submitScoreButton.gameObject.SetActive(false);
                 winText.enabled = false;
 
+                restartButton.gameObject.SetActive(true);
+                menuButton.gameObject.SetActive(true);
+                exitButton.gameObject.SetActive(true);
+
                 leaderBoard.Add(playerName, finishTime);
 
                 showLeaderboard();
@@ -543,7 +549,7 @@ public class PlayerController : MonoBehaviour {
         foreach (var child in leaderBoard)
         {
             leaderboardNames.text = leaderboardNames.text + "\n" + child.Key.ToString();
-            leaderboardTimes.text = leaderboardTimes.text + "\n" + child.Value.ToString();
+            leaderboardTimes.text = leaderboardTimes.text + "\n" + child.Value.ToString("0.00");
             leaderboardNumbers.text = leaderboardNumbers.text + "\n" + count + ".";
             count++;
         }
