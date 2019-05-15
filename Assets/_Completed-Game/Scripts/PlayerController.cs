@@ -25,6 +25,10 @@ public class PlayerController : MonoBehaviour {
     private Text leaderboardNames;
     private Text leaderboardTimes;
     private Text leaderboardNumbers;
+    private Button restartButton;
+    private Button menuButton;
+    private Button exitButton;
+    private Button resumeButton;
 
     // Sound Variables
     public AudioSource bounceSource;
@@ -111,16 +115,26 @@ public class PlayerController : MonoBehaviour {
         leaderboardTimes = GameObject.Find("Leaderboard Times").GetComponent<Text>();
         leaderboardNumbers = GameObject.Find("Leaderboard Numbers").GetComponent<Text>();
 
+        restartButton = GameObject.Find("Restart Button").GetComponent<Button>();
+        menuButton = GameObject.Find("Menu Button").GetComponent<Button>();
+        exitButton = GameObject.Find("Exit Button").GetComponent<Button>();
+        resumeButton = GameObject.Find("Resume Button").GetComponent<Button>();
+
         count = 0;
         countText.text = "0 / " + pickupMax;
         winText.text = "";
         windowShade.enabled = false;
+
         leaderboardNames.enabled = false;
         leaderboardTimes.enabled = false;
         leaderboardNumbers.enabled = false;
         playerNameInput.gameObject.SetActive(false);
         submitScoreButton.gameObject.SetActive(false);
 
+        restartButton.gameObject.SetActive(false);
+        menuButton.gameObject.SetActive(false);
+        exitButton.gameObject.SetActive(false);
+        resumeButton.gameObject.SetActive(false);
 
         // Init jump variable
         jump = new Vector3(0.0f, 2.0f, 0.0f);
@@ -409,7 +423,11 @@ public class PlayerController : MonoBehaviour {
         // UI Changes
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        winText.text = "Paused";
+        restartButton.gameObject.SetActive(true);
+        menuButton.gameObject.SetActive(true);
+        exitButton.gameObject.SetActive(true);
+        resumeButton.gameObject.SetActive(true);
+
         windowShade.enabled = true;
 
         // Sound
@@ -419,7 +437,6 @@ public class PlayerController : MonoBehaviour {
         alertSource.PlayOneShot(uiDown);
         musicSource.volume = musicVolume / 2;
 
-        showLeaderboard();
     }
 
     void Unpause()
@@ -434,14 +451,17 @@ public class PlayerController : MonoBehaviour {
         // UI Changes
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        winText.text = "";
+        restartButton.gameObject.SetActive(false);
+        menuButton.gameObject.SetActive(false);
+        exitButton.gameObject.SetActive(false);
+        resumeButton.gameObject.SetActive(false);
+
         windowShade.enabled = false;
 
         // Sound
         alertSource.PlayOneShot(uiUp);
         musicSource.volume = musicVolume;
 
-        hideLeaderboard();
     }
 
     void Win()
@@ -537,5 +557,11 @@ public class PlayerController : MonoBehaviour {
         leaderboardTimes.enabled = false;
         leaderboardNumbers.enabled = false;
     }
+
+    // Pause Screen Button Calls
+    public void ResumeClick() { Unpause(); }
+    public void RestartClick() { SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
+    public void MenuClick() { SceneManager.LoadScene("Menu"); }
+    public void ExitClick() { Application.Quit(); }
 
 }
