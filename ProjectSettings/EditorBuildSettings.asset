@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/UI Scenes/Menu.unity
+    guid: c6740646f1c8f44678fcb4dde3c3e3ea
+  - enabled: 1
     path: Assets/Scenes/Prototype Scene.unity
     guid: 6c28f345404fbf447aff21c85d189433
   - enabled: 1
@@ -17,12 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/UI Scenes/Help.unity
     guid: 410cec644d93547fba045acca96d8a70
-  - enabled: 1
-    path: Assets/Scenes/UI Scenes/Menu.unity
-    guid: c6740646f1c8f44678fcb4dde3c3e3ea
-  - enabled: 1
-    path: Assets/Scenes/UI Scenes/Title.unity
-    guid: b21e5e631ca2846fdb179203ee9144fb
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Nightmare.unity
     guid: e9e45103a528342f0868b7bf1e597fb4
