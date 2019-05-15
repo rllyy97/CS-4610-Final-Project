@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{5FCD587C-B023-5664-12C3-B6D9F281A654}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scenes/UI Scenes/MenuScript.cs">
+    <Files>
+      <File FileName="Assets/Scenes/UI Scenes/MenuScript.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.com.unity.multiplayer-hlapi.Editor PreferredExecutionTarget="Unity.Editor" />
+  <MultiItemStartupConfigurations />
+</Properties>
